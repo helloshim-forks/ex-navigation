@@ -20,9 +20,8 @@ type State = {
   enabled: boolean,
 };
 
-@createFocusAwareComponent
-@withNavigation
-export default class ExNavigationAndroidBackButtonBehavior
+export default createFocusAwareComponent(withNavigation(
+class ExNavigationAndroidBackButtonBehavior
   extends React.Component {
   state: State = {
     enabled: false,
@@ -79,4 +78,4 @@ export default class ExNavigationAndroidBackButtonBehavior
       enabled: false,
     });
   }
-}
+}));

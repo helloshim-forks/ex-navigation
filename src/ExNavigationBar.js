@@ -85,7 +85,8 @@ const titleStyles = StyleSheet.create({
   },
 });
 
-@withNavigation class ExNavigationBarBackButton extends PureComponent {
+withNavigation(
+class ExNavigationBarBackButton extends PureComponent {
   render() {
     const { tintColor } = this.props;
 
@@ -103,7 +104,7 @@ const titleStyles = StyleSheet.create({
   }
 
   _onPress = () => this.props.navigator.pop();
-}
+});
 
 class ExNavigationBarMenuButton extends PureComponent {
   render() {
