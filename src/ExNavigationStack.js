@@ -19,7 +19,6 @@ import NavigationItem from './ExNavigationStackItem';
 import { getBackButtonManager } from './ExNavigationBackButtonManager';
 import { createNavigatorComponent } from './ExNavigationComponents';
 import ExNavigatorContext from './ExNavigatorContext';
-import ExNavigationAlertBar from './ExNavigationAlertBar';
 import * as NavigationStyles from './ExNavigationStyles';
 import SharedElementGroup
   from './shared-element/ExNavigationSharedElementGroup';
@@ -533,8 +532,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     const AlertBarComponent =
       this.props.alertBarComponent ||
-      this.context.alertBarComponent ||
-      ExNavigationAlertBar;
+      this.context.alertBarComponent;
 
     const alertBarContainerStyle = [
       styles.alertBarContainer,
