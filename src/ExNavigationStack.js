@@ -11,7 +11,6 @@ import _ from 'lodash';
 import invariant from 'invariant';
 import cloneReferencedElement from 'react-clone-referenced-element';
 import PureComponent from './utils/PureComponent';
-import { debounce } from 'core-decorators';
 
 import Actions from './ExNavigationActions';
 import NavigationBar from './ExNavigationBar';
@@ -139,12 +138,11 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     return this.navigationContext.router;
   }
 
-  @debounce(500, true)
-  push(
+  push = _.debounce((
     route: ExNavigationRoute | string,
     paramsOrOptions?: Object | TransitionOptions,
     options?: TransitionOptions
-  ) {
+  ) => {
     if (typeof route == 'string') {
       route = this.router.getRoute(route, paramsOrOptions);
     } else {
@@ -163,24 +161,30 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).push(route);
     });
-  }
+  }, 500, {
+    leading: true
+  });
 
-  @debounce(500, true)
-  pop(n: number = 1) {
+  pop = _.debounce((n: number = 1) => {
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).pop(n);
     });
-  }
+  }, 500, {
+    leading: true
+  });
 
-  @debounce(500, true)
-  popToTop() {
+  popToTop = _.debounce(() => {
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).popToTop();
     });
-  }
+  }, 500, {
+    leading: true
+  });
 
-  @debounce(500, true)
-  replace(route: ExNavigationRoute | string, params?: Object) {
+  replace = _.debounce((
+    route: ExNavigationRoute | string,
+    params?: Object
+  ) => {
     if (typeof route == 'string') {
       route = this.router.getRoute(route, params);
     }
@@ -194,7 +198,9 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     requestAnimationFrame(() => {
       this.componentInstance._useAnimation = true;
     });
-  }
+  }, 500, {
+    leading: true
+  });
 
   getCurrentRoute() {
     const navigatorState = this._getNavigatorState();
