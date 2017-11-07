@@ -532,7 +532,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     const AlertBarComponent =
       this.props.alertBarComponent ||
-      this.context.alertBarComponent;
+      this.context.alertBarComponent || View;
 
     const alertBarContainerStyle = [
       styles.alertBarContainer,
