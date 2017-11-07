@@ -85,7 +85,7 @@ const titleStyles = StyleSheet.create({
   },
 });
 
-withNavigation(
+const ExNavigationBarBackButton = withNavigation(
 class ExNavigationBarBackButton extends PureComponent {
   render() {
     const { tintColor } = this.props;
