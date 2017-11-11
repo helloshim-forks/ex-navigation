@@ -6,6 +6,7 @@ import {
   TouchableNativeFeedback,
   Text,
   View,
+  SafeAreaView,
 } from 'react-native';
 
 import { unsupportedNativeView } from '../ExUnsupportedNativeView';
@@ -33,21 +34,25 @@ export default class ExNavigationTabBar extends React.Component {
     let backgroundColor = isTranslucent ? 'rgba(255,255,255,0.5)' : '#fefefe';
 
     return (
-      <View style={[styles.container, { height }]}>
+      <SafeAreaView style={styles.container}>
         {isTranslucent &&
-          <BlurView style={[styles.translucentUnderlay, { height }]} />}
-
+          <BlurView style={[StyleSheet.absoluteFill, { height }]} />}
         <View
+          ref={this.props.onMount}
+          onLayout={this.props.onLayout}
           style={[
+            StyleSheet.absoluteFill,
             styles.innerContainer,
             { backgroundColor },
             this.props.style,
-          ]}>
+          ]}
+        />
+        <View style={{ height }}>
           <View style={styles.itemContainer}>
             {this.renderTabItems()}
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -129,19 +134,7 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'transparent',
   },
-  translucentUnderlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
   innerContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
     borderTopColor: '#b2b2b2',
     borderTopWidth: StyleSheet.hairlineWidth,
   },
