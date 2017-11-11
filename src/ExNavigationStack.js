@@ -46,7 +46,7 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
     : NavigationStyles.Fade,
 };
 
-const DEFAULT_STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
+const DEFAULT_STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 0 : 25;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios'
   ? DEFAULT_STATUSBAR_HEIGHT
   : global.__exponent ? DEFAULT_STATUSBAR_HEIGHT : 0;

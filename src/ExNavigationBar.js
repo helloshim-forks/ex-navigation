@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   ViewPropTypes,
+  SafeAreaView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import PureComponent from './utils/PureComponent';
@@ -24,12 +25,10 @@ if (expoModule) {
   BlurView = unsupportedNativeView('BlurView');
 }
 
-// Exponent draws under the status bar on Android, but vanilla React Native does not.
-// So we need to factor the status bar height in with Exponent but can ignore it with
-// vanilla React Native
-const STATUSBAR_HEIGHT = Platform.OS === 'ios'
-  ? 20
-  : global.__exponent ? 24 : 0;
+const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
+
+// We need to factor the status bar height in with Exponent
+const STATUSBAR_HEIGHT = global.__exponent ? 24 : 0;
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
@@ -241,7 +240,6 @@ export default class ExNavigationBar extends PureComponent {
       styles.appbar,
       backgroundStyle,
       style,
-      { height },
       styleFromRouteConfig,
     ];
 
@@ -263,35 +261,46 @@ export default class ExNavigationBar extends PureComponent {
     });
 
     const backgroundComponents = scenesProps.map(this._renderBackground, this);
-    const wrapperStyle = [
-      styles.wrapper,
-      { paddingTop: APPBAR_HEIGHT + this.props.statusBarHeight },
-    ];
+    // TODO
+    // const blur = isTranslucent && (
+    //   <SafeAreaView style={{
+    //     position: "absolute",
+    //     top: 0,
+    //     left: 0,
+    //     right: 0
+    //   }}>
+    //     <BlurView
+    //       tint={translucentTint}
+    //       intensity={100}
+    //       style={StyleSheet.absoluteFill}
+    //     />
+    //     <View style={{height}} />
+    //   </SafeAreaView>
+    // );
+    // ...
+    // <View
+    //   style={StyleSheet.absoluteFill}
+    //   pointerEvents="box-none"
+    // >
+    //  {blur}
+    //  {bar}
+    // </View>
+
+    // TODO "wrapper"
+    //     paddingBottom: Platform.OS === 'android' ? 16 : 0,
 
     return (
-      <View
+      <AnimatedSafeAreaView
+        style={containerStyle}
         pointerEvents={this.props.visible ? 'auto' : 'none'}
-        style={wrapperStyle}>
-        {isTranslucent &&
-          <BlurView
-            tint={translucentTint}
-            intensity={100}
-            style={[styles.translucentUnderlay, { height }]}
-          />}
-
-        <Animated.View style={containerStyle}>
-          {backgroundComponents}
-          <View
-            style={[
-              styles.appbarInnerContainer,
-              { top: this.props.statusBarHeight },
-            ]}>
-            {titleComponents}
-            {leftComponents}
-            {rightComponents}
-          </View>
-        </Animated.View>
-      </View>
+      >
+        {backgroundComponents}
+        <View style={{height}}>
+          {titleComponents}
+          {leftComponents}
+          {rightComponents}
+        </View>
+      </AnimatedSafeAreaView>
     );
   }
 
@@ -396,35 +405,11 @@ ExNavigationBar.BackButton = ExNavigationBarBackButton;
 ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
 
 const styles = StyleSheet.create({
-  wrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    // TODO(brentvatne): come up with a better solution for making the
-    // elevation show up properly on Android
-    paddingBottom: Platform.OS === 'android' ? 16 : 0,
-  },
-
-  wrapperWithoutAppbar: {
-    paddingTop: 0,
-  },
-
-  translucentUnderlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
 
   appbar: {
-    alignItems: 'center',
     borderBottomColor: ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR,
     borderBottomWidth: ExNavigationBar.DEFAULT_BORDER_BOTTOM_WIDTH,
     elevation: 4,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
     left: 0,
     position: 'absolute',
     right: 0,
