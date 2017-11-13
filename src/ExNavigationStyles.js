@@ -182,6 +182,21 @@ export const SlideHorizontalIOS: ExNavigationStyles = {
         ],
       };
     },
+    forBackground: props => {
+      const { layout, position, scene, scenes } = props;
+      const { index } = scene;
+      const width = layout.initWidth;
+      return {
+        transform: [
+          {
+            translateX: position.interpolate({
+              inputRange: [index - 1, index, index + 1],
+              outputRange: [width, 0, -width],
+            })
+          }
+        ]
+      };
+    },
     /**
      * Crossfade the left view
      */
