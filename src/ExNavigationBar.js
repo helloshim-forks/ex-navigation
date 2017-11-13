@@ -300,7 +300,7 @@ export default class ExNavigationBar extends PureComponent {
       props,
       'background',
       this.props.renderBackgroundComponent,
-      options
+      this.props.interpolator.forBackground,
     );
   }
 
@@ -364,7 +364,7 @@ export default class ExNavigationBar extends PureComponent {
 
     const pointerEvents = offset !== 0 || isStale ? 'none' : 'box-none';
 
-    if (name === 'background') {
+    if (name === 'background' && !styleInterpolator) {
       return (
         <View
           pointerEvents={'none'}
