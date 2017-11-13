@@ -32,17 +32,21 @@ export default class ExNavigationTabBar extends React.Component {
     let isTranslucent = this.props.translucent;
     let backgroundColor = isTranslucent ? 'rgba(255,255,255,0.5)' : '#fefefe';
 
+    const background = this.props.background ? this.props.background : (
+      <View style={[
+        StyleSheet.absoluteFill,
+        styles.innerContainer,
+        { backgroundColor },
+        this.props.style,
+      ]} />
+    );
+
     return (
       <View style={[styles.container, { height }]}>
         {isTranslucent &&
-          <BlurView style={[styles.translucentUnderlay, { height }]} />}
-
-        <View
-          style={[
-            styles.innerContainer,
-            { backgroundColor },
-            this.props.style,
-          ]}>
+          <BlurView style={[StyleSheet.absoluteFill, { height }]} />}
+        {background}
+        <View style={{ height }}>
           <View style={styles.itemContainer}>
             {this.renderTabItems()}
           </View>

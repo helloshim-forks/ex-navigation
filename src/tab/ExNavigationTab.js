@@ -64,6 +64,7 @@ type Props = {
   tabBarHeight?: number,
   tabBarColor?: string,
   tabBarStyle?: any,
+  tabBarBackground?: React.Element<{}>,
   children: Array<React.Element<{}>>,
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (
@@ -148,6 +149,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
           ? { backgroundColor: this.props.tabBarColor }
           : {},
       ],
+      background: this.props.tabBarBackground,
     };
 
     const tabBar = this.props.renderTabBar(tabBarProps);
