@@ -25,9 +25,14 @@ if (expoModule) {
   BlurView = unsupportedNativeView('BlurView');
 }
 
-const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
+const useSafeAreaView = (Platform.OS === 'ios' &&
+                         parseInt(Platform.Version, 10) >= 11);
+const BarContainer = useSafeAreaView
+      ? Animated.createAnimatedComponent(SafeAreaView)
+      : Animated.View;
 
 // We need to factor the status bar height in with Exponent
+// TODO 20 for ios?
 const STATUSBAR_HEIGHT = global.__exponent ? 24 : 0;
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
@@ -228,7 +233,7 @@ export default class ExNavigationBar extends PureComponent {
     });
 
     // TODO: this should come from the latest scene config
-    const height = this.props.barHeight + this.props.statusBarHeight;
+    const height = this.props.barHeight;
 
     let styleFromRouteConfig = this.props.latestRoute.getBarStyle();
     let isTranslucent = !!this.props.latestRoute.getTranslucent();
@@ -245,6 +250,10 @@ export default class ExNavigationBar extends PureComponent {
 
     if (this.props.overrideStyle) {
       containerStyle = [style];
+    }
+
+    if (!useSafeAreaView) {
+      containerStyle.push({paddingTop: this.props.statusBarHeight});
     }
 
     containerStyle.push(
@@ -290,7 +299,7 @@ export default class ExNavigationBar extends PureComponent {
     //     paddingBottom: Platform.OS === 'android' ? 16 : 0,
 
     return (
-      <AnimatedSafeAreaView
+      <BarContainer
         style={containerStyle}
         pointerEvents={this.props.visible ? 'auto' : 'none'}
       >
@@ -300,7 +309,7 @@ export default class ExNavigationBar extends PureComponent {
           {leftComponents}
           {rightComponents}
         </View>
-      </AnimatedSafeAreaView>
+      </BarContainer>
     );
   }
 
