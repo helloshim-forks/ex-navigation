@@ -6,7 +6,6 @@ import {
   TouchableNativeFeedback,
   Text,
   View,
-  SafeAreaView,
 } from 'react-native';
 
 import { unsupportedNativeView } from '../ExUnsupportedNativeView';
@@ -43,16 +42,14 @@ export default class ExNavigationTabBar extends React.Component {
     );
 
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.container, { height }]}>
         {isTranslucent &&
           <BlurView style={[StyleSheet.absoluteFill, { height }]} />}
         {background}
-        <View style={{ height }}>
-          <View style={styles.itemContainer}>
-            {this.renderTabItems()}
-          </View>
+        <View style={styles.itemContainer}>
+          {this.renderTabItems()}
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
